@@ -493,22 +493,18 @@ static void draw_bongo(bool minimal)
 
     if (!minimal)
     {
-        // print wpm
+        // print caps
         oled_set_cursor(0, 0);
-        sprintf(wpm, "WPM:%03d", get_current_wpm());
-        oled_write(wpm, false);
+        oled_write_P(PSTR("CAP"), led_state.caps_lock);
 
         // calculate && print clock
         oled_set_cursor(0, 2);
         uint8_t  hour = last_minute / 60;
         uint16_t minute = last_minute % 60;
-        bool is_pm = (hour / 12) > 0;
-        hour = hour % 12;
-        if (hour == 0) {
-            hour = 12;
-        }
+
+        // Display in 24-hour format
         static char time_str[8] = "";
-        sprintf(time_str, "%02d:%02d%s", hour, minute, is_pm ? "pm" : "am");
+        sprintf(time_str, "%02d:%02d", hour, minute);
         oled_write(time_str, false);
     }
 }
