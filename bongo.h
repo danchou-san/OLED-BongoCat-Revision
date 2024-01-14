@@ -494,6 +494,7 @@ static void draw_bongo(bool minimal)
     if (!minimal)
     {
         // print caps
+        led_t led_state = host_keyboard_led_state();
         oled_set_cursor(0, 0);
         oled_write_P(PSTR("CAP"), led_state.caps_lock);
 
