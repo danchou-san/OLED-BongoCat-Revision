@@ -4,6 +4,8 @@
 #include "bongo.h"
 #endif
 
+#include "whistle.h"
+
 void draw_default(void);
 void draw_clock(void);
 
@@ -34,6 +36,9 @@ bool oled_task_kb(void) {
             break;
         case OLED_BONGO_MIN:
             draw_bongo(true);
+            break;
+        case OLED_WHISTLE:
+            draw_whistle();
             break;
     }
     return false;
@@ -206,7 +211,7 @@ void draw_default(void) {
 
 /* Matrix display is 12 x 12 pixels */
 #define MATRIX_DISPLAY_X 0
-#define MATRIX_DISPLAY_Y 18
+#define MATRIX_DISPLAY_Y 11
 
     // matrix
     for (uint8_t x = 0; x < MATRIX_ROWS; x++) {

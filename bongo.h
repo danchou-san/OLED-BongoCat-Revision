@@ -452,6 +452,18 @@ void eval_anim_state(void)
     }
 }
 
+static void draw_line_bongo_h(uint8_t x, uint8_t y, uint8_t len) {
+    for (uint8_t i = 0; i < len; i++) {
+        oled_write_pixel(i + x, y, true);
+    }
+}
+
+static void draw_line_bongo_v(uint8_t x, uint8_t y, uint8_t len) {
+    for (uint8_t i = 0; i < len; i++) {
+        oled_write_pixel(x, i + y, true);
+    }
+}
+
 static void draw_bongo(bool minimal)
 {
     eval_anim_state();
@@ -493,13 +505,8 @@ static void draw_bongo(bool minimal)
 
     if (!minimal)
     {
-        // print caps
-        led_t led_state = host_keyboard_led_state();
-        oled_set_cursor(0, 0);
-        oled_write_P(PSTR("CAP"), led_state.caps_lock);
-
         // calculate && print clock
-        oled_set_cursor(0, 2);
+        oled_set_cursor(0, 0);
         uint8_t  hour = last_minute / 60;
         uint16_t minute = last_minute % 60;
 
@@ -507,5 +514,31 @@ static void draw_bongo(bool minimal)
         static char time_str[8] = "";
         sprintf(time_str, "%02d:%02d", hour, minute);
         oled_write(time_str, false);
+
+        /* Matrix display is 12 x 12 pixels */
+        #define MATRIX_DISPLAY_X 0
+        #define MATRIX_DISPLAY_Y 11
+
+        // matrix
+        for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
+            for (uint8_t y = 0; y < MATRIX_COLS; y++) {
+                bool on = (matrix_get_row(x) & (1 << y)) > 0;
+                oled_write_pixel(MATRIX_DISPLAY_X + y + 2, MATRIX_DISPLAY_Y + x + 2, on);
+            }
+        }
+
+        // outline
+        draw_line_bongo_h(MATRIX_DISPLAY_X, MATRIX_DISPLAY_Y, 19);
+        draw_line_bongo_h(MATRIX_DISPLAY_X, MATRIX_DISPLAY_Y + 9, 19);
+        draw_line_bongo_v(MATRIX_DISPLAY_X, MATRIX_DISPLAY_Y, 9);
+        draw_line_bongo_v(MATRIX_DISPLAY_X + 19, MATRIX_DISPLAY_Y, 9);
+
+        // oled location
+        draw_line_bongo_h(MATRIX_DISPLAY_X + 14, MATRIX_DISPLAY_Y + 2, 3);
+
+        // print caps
+        led_t led_state = host_keyboard_led_state();
+        oled_set_cursor(0, 3);
+        oled_write_P(PSTR("CAPS"), led_state.caps_lock);
     }
 }

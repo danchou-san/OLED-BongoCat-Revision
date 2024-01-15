@@ -8,6 +8,7 @@
 #define EEPROM_DEFAULT_OLED (VIA_EEPROM_CUSTOM_CONFIG_ADDR+2)
 #define EEPROM_CUSTOM_ENCODER (VIA_EEPROM_CUSTOM_CONFIG_ADDR+3)
 #define BONGO_ENABLE
+#define WHISTLE_ENABLE
 
 typedef union {
     uint8_t raw;
@@ -54,6 +55,7 @@ enum custom_encoder_behavior {
 enum oled_modes {
   OLED_BONGO,
   OLED_BONGO_MIN,
+  OLED_WHISTLE,
   OLED_DEFAULT,
   OLED_TIME,
   OLED_OFF,
